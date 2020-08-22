@@ -23,8 +23,8 @@ describe('plc digital input', () => {
       const f = jest.fn();
       digInput.register(f);
       const buf = Buffer.from([0x0f]);
-      digInput.handleModbusData(buf, 31);
-      expect(f).toHaveBeenCalledWith(false, false, 31);
+      digInput.handleModbusData(buf, 31, 0);
+      expect(f).toHaveBeenCalledWith(false, false, 31, 0);
     });
 
     test('different output', () => {
@@ -32,8 +32,8 @@ describe('plc digital input', () => {
       const f = jest.fn();
       digInput.register(f);
       const buf = Buffer.from([0x20]);
-      digInput.handleModbusData(buf, 65);
-      expect(f).toHaveBeenCalledWith(true, true, 65);
+      digInput.handleModbusData(buf, 65, 0);
+      expect(f).toHaveBeenCalledWith(true, true, 65, 0);
     });
 
     test('sequence of modbus changes', () => {
@@ -41,10 +41,10 @@ describe('plc digital input', () => {
       const f = jest.fn();
       digInput.register(f);
       const buf = Buffer.from([0x20]);
-      digInput.handleModbusData(buf, 5);
-      digInput.handleModbusData(buf, 6);
+      digInput.handleModbusData(buf, 5, 0);
+      digInput.handleModbusData(buf, 6, 0);
       buf[0] = 0x00;
-      digInput.handleModbusData(buf, 7);
+      digInput.handleModbusData(buf, 7, 0);
       expect(f).toHaveBeenCalledTimes(3);
     });
   });

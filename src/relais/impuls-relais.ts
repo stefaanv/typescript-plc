@@ -6,13 +6,14 @@ export default class ImpulsRelais extends FunctionBlock<boolean> {
     status: boolean,
     inputChanged: boolean,
     cycleNumber: number,
+    timestamp: number,
   ) => {
     let outputChanged = false;
     if (inputChanged && status === true) {
       this._state = !this._state;
       outputChanged = true;
     }
-    this.notifyListeners(this._state, outputChanged, cycleNumber);
+    this.notifyListeners(this._state, outputChanged, cycleNumber, timestamp);
   };
 
   constructor(initialState: boolean) {

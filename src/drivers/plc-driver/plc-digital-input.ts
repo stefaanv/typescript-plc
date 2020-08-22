@@ -1,9 +1,9 @@
 import { IModbusDataProcessor } from '../../function-block-base-classes/modbus-data-processor.interface';
 import { FunctionBlock } from '../../function-block-base-classes/function-block';
+import { ModbusDataEventHandler } from '@src/events/modbus-data-event';
 
 export default class plcDigitalInput extends FunctionBlock<boolean>
   implements IModbusDataProcessor {
-  // private _status: boolean;
   private readonly _mask: number;
   private readonly _modbusAddress: number;
 
@@ -27,14 +27,14 @@ export default class plcDigitalInput extends FunctionBlock<boolean>
     this._state = false;
   }
 
-  // public get status(): boolean {
-  //   return this._status;
-  // }
-
-  public handleModbusData(buffer: Buffer, cycleNumber: number): void {
+  public handleModbusData: ModbusDataEventHandler = (
+    buffer: Buffer,
+    cycleNumber: number,
+    timestamp: number,
+  ): void => {
     const newStatus = (buffer[0] & this._mask) > 0;
     const statusChanged = newStatus != this._state;
     this._state = newStatus;
-    this.notifyListeners(newStatus, statusChanged, cycleNumber);
-  }
+    this.notifyListeners(newStatus, statusChanged, cycleNumber, timestamp);
+  };
 }

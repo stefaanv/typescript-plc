@@ -19,9 +19,10 @@ export class FunctionBlock<S> implements OutputUpdatedEvent<S> {
     status: S,
     statusChanged: boolean,
     cycleNumber: number,
+    timestamp: number,
   ): void {
     for (const handler of this._handlers) {
-      handler(status, statusChanged, cycleNumber);
+      handler(status, statusChanged, cycleNumber, timestamp);
     }
   }
 
